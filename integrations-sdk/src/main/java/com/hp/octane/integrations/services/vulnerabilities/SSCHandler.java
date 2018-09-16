@@ -97,7 +97,10 @@ public class SSCHandler {
         return theCloset;
 
     }
+    /// For Unit Testing
+    public SSCHandler() {
 
+    }
     public SSCHandler(VulnerabilitiesServiceImpl.VulnerabilitiesQueueItem vulnerabilitiesQueueItem,
                       String sscUrl,
                       String sscBaseToken,
@@ -150,7 +153,7 @@ public class SSCHandler {
         return issuesFileSerializer.doSerializeAndCache();
     }
 
-    private List<OctaneIssue> createOctaneIssues(Issues issues) {
+    public List<OctaneIssue> createOctaneIssues(Issues issues) {
         if (issues == null) {
             return new ArrayList<>();
         }
