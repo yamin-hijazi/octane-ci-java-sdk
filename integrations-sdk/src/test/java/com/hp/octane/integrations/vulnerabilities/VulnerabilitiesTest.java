@@ -41,7 +41,7 @@ public class VulnerabilitiesTest {
 
 
         Assert.assertEquals(projectIdURL, "projects?q=name:project");
-        Assert.assertEquals(newIssuesURL, "projectVersions/1/issues?showremoved=false");
+        Assert.assertEquals(newIssuesURL, "projectVersions/1/issues?q=[issue_age]:new&qm=issues&showhidden=false&showremoved=false&showsuppressed=false");
         Assert.assertEquals(artifactsURL, "projectVersions/100/artifacts?limit=1000");
         Assert.assertEquals(urlForProjectVersion, "projects/500/versions?q=name:version");
     }
