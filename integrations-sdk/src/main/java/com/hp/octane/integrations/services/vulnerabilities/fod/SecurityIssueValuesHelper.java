@@ -107,12 +107,16 @@ public class SecurityIssueValuesHelper {
 			entity.setAnalysis(analysisListNode);
 		}else{
 			String listNodeId = mapFODAnalysisToLogicalName(vulnerability.status);
+			if(listNodeId == null) {
+				listNodeId =  mapAuditorStatusToAnalysis(vulnerability.auditorStatus);
+			}
 			if(listNodeId != null) {
 				Entity analysisListNode = createListNodeEntity(listNodeId);
 				entity.setAnalysis(analysisListNode);
 			}
 		}
 	}
+
 
 	private static boolean isReviewed(Vulnerability issue) {
 		boolean returnValue = false;
@@ -206,7 +210,13 @@ public class SecurityIssueValuesHelper {
 		}
 		return returnValue;
 	}
-
+	private String mapAuditorStatusToAnalysis(String auditorStatus) {
+		String returnValue = null;
+		if("Pending Review".equalsIgnoreCase(auditorStatus)){
+			returnValue = MAYBE_AN_ISSUE;
+		}
+		return returnValue;
+	}
 	private void setSeverity(OctaneIssue entity, Integer severity) {
 		if (severity == null) {
 			return;
