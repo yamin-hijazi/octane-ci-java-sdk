@@ -19,6 +19,7 @@ import com.hp.octane.integrations.dto.entities.Entity;
 import com.hp.octane.integrations.dto.securityscans.OctaneIssue;
 import com.hp.octane.integrations.dto.securityscans.impl.OctaneIssueImpl;
 import com.hp.octane.integrations.services.vulnerabilities.fod.dto.FODConstants;
+import com.hp.octane.integrations.services.vulnerabilities.fod.dto.FodConnectionFactory;
 import com.hp.octane.integrations.services.vulnerabilities.fod.dto.pojos.Vulnerability;
 import com.hp.octane.integrations.services.vulnerabilities.fod.dto.pojos.VulnerabilityAllData;
 import org.apache.logging.log4j.LogManager;
@@ -44,29 +45,40 @@ public class SecurityIssueValuesHelper {
 
 		OctaneIssue entity = new OctaneIssueImpl();
 
-			entity.setCategory(vulnerability.category);
+		entity.setCategory(vulnerability.category);
 
-			if (vulnerability.introducedDate != null) {
-				String dateAsString = getIntroducedDate(vulnerability.introducedDate, baselineDate);
-				entity.setIntroducedDate(dateAsString);
-			}
-			setAdditionalData(vulnerability, entity, vulnerabilityAllData);
-			entity.setLine(vulnerability.lineNumber);
-			entity.setToolName(FODConstants.FODTool);
-			entity.setPackage(vulnerability.packageValue);
-			//entity.setPRid(vulnerability.);
-			entity.setPrimaryLocationFull(vulnerability.primaryLocationFull);
-			setStatus(entity, vulnerability.status);
-			setSeverity(entity, vulnerability.severity);
-			entity.setRemoteId(vulnerability.getRemoteId());
-			entity.setExternalLink(vulnerability.hRef);
-			//TODO: Assigned User
-			//setAssignedUser(entity, vulnerability.assignedUser, pipelineRunEntity);
-			setAnalysis(entity, vulnerability);
-			entity.setRemoteTag(remoteTag);
-			//TODO:
-			//setToolType(entity);
-			return entity;
+		if (vulnerability.introducedDate != null) {
+			String dateAsString = getIntroducedDate(vulnerability.introducedDate, baselineDate);
+			entity.setIntroducedDate(dateAsString);
+		}
+		setAdditionalData(vulnerability, entity, vulnerabilityAllData);
+		entity.setLine(vulnerability.lineNumber);
+		entity.setToolName(FODConstants.FODTool);
+		entity.setPackage(vulnerability.packageValue);
+		//entity.setPRid(vulnerability.);
+		entity.setPrimaryLocationFull(vulnerability.primaryLocationFull);
+		setStatus(entity, vulnerability.status);
+		setSeverity(entity, vulnerability.severity);
+		entity.setRemoteId(vulnerability.getRemoteId());
+		setExternalLink(vulnerability, entity);
+		//TODO: Assigned User
+		//setAssignedUser(entity, vulnerability.assignedUser, pipelineRunEntity);
+		setAnalysis(entity, vulnerability);
+		entity.setRemoteTag(remoteTag);
+		//TODO:
+		//setToolType(entity);
+		return entity;
+	}
+
+	private void setExternalLink(Vulnerability vulnerability, OctaneIssue entity) {
+		String entitiesURL = FodConnectionFactory.instance().getEntitiesURL();
+		String externalLink = String.format("%s/releases/%d/vulnerabilities/%s/all-data",entitiesURL,
+				vulnerability.releaseId,
+				vulnerability.vulnId);
+		//https://api.sandbox.fortify.com/api/v3/releases/4302/vulnerabilities/217b64f9-9e73-4578-a9ea-bbe41005f858/all-data
+		if(externalLink != null) {
+			entity.setExternalLink(externalLink);
+		}
 	}
 
 	public static boolean sameDay(Date date1, Date date2){
