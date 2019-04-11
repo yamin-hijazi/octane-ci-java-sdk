@@ -72,7 +72,7 @@ public class SecurityIssueValuesHelper {
 
 	private void setExternalLink(Vulnerability vulnerability, OctaneIssue entity) {
 		String entitiesURL = FodConnectionFactory.instance().getEntitiesURL();
-		String externalLink = String.format("%s/releases/%d/vulnerabilities/%s/all-data",entitiesURL,
+		String externalLink = String.format("%s/releases/%s/vulnerabilities/%s/all-data",entitiesURL,
 				vulnerability.releaseId,
 				vulnerability.vulnId);
 		//https://api.sandbox.fortify.com/api/v3/releases/4302/vulnerabilities/217b64f9-9e73-4578-a9ea-bbe41005f858/all-data
