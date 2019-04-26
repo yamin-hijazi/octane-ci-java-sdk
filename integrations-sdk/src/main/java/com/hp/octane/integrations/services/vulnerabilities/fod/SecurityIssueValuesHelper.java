@@ -239,6 +239,13 @@ public class SecurityIssueValuesHelper {
 		String returnValue = null;
 		if("Pending Review".equalsIgnoreCase(auditorStatus)){
 			returnValue = MAYBE_AN_ISSUE;
+		} else if("Not an Issue".equalsIgnoreCase(auditorStatus) ||
+				"Risk accepted".equalsIgnoreCase(auditorStatus)){
+			returnValue = NOT_AN_ISSUE;
+		} else if("Remediation Required".equalsIgnoreCase(auditorStatus) ||
+				"Remediation Deferred".equalsIgnoreCase(auditorStatus) ||
+				"Risk Mitigated".equalsIgnoreCase(auditorStatus) ){
+			returnValue = IS_AN_ISSUE;
 		}
 		return returnValue;
 	}
