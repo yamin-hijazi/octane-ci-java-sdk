@@ -68,7 +68,6 @@ public class FODValuesConverter {
         setStatus(entity, vulnerability.status);
         setSeverity(entity, vulnerability.severity);
         entity.setRemoteId(vulnerability.getRemoteId());
-        setExternalLink(vulnerability, entity);
         setAssignedUser(entity, vulnerability.assignedUser);
         setAnalysis(entity, vulnerability);
         entity.setRemoteTag(remoteTag);
@@ -84,16 +83,6 @@ public class FODValuesConverter {
         }
     }
 
-    private void setExternalLink(Vulnerability vulnerability, OctaneIssue entity) {
-        String entitiesURL = FodConnectionFactory.instance().getEntitiesURL();
-        String externalLink = String.format("%s/releases/%s/vulnerabilities/%s/all-data", entitiesURL,
-                vulnerability.releaseId,
-                vulnerability.id);
-        //https://api.sandbox.fortify.com/api/v3/releases/4302/vulnerabilities/217b64f9-9e73-4578-a9ea-bbe41005f858/all-data
-        if (externalLink != null) {
-            entity.setExternalLink(externalLink);
-        }
-    }
 
     public static boolean sameDay(Date date1, Date date2) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
