@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.hp.octane.integrations.services.vulnerabilities.OctaneIssueConsts.*;
+import static com.hp.octane.integrations.services.vulnerabilities.fod.dto.FodConnectionFactory.API_SUFFIX;
 import static com.hp.octane.integrations.services.vulnerabilities.ssc.SSCToOctaneIssueUtil.createListNodeEntity;
 
 /**
@@ -68,6 +69,7 @@ public class FODValuesConverter {
         setStatus(entity, vulnerability.status);
         setSeverity(entity, vulnerability.severity);
         entity.setRemoteId(vulnerability.getRemoteId());
+        setExternalLink(vulnerability, entity);
         setAssignedUser(entity, vulnerability.assignedUser);
         setAnalysis(entity, vulnerability);
         entity.setRemoteTag(remoteTag);
@@ -83,6 +85,22 @@ public class FODValuesConverter {
         }
     }
 
+    private void setExternalLink(Vulnerability vulnerability, OctaneIssue entity) {
+
+        String baseURL = getBaseURL(FodConnectionFactory.instance().getEntitiesURL());
+
+        //https://{baseURL}/Redirect/Issues/{vulnID}
+        String externalLink = String.format("%s/Redirect/Issues/%s", baseURL,
+                vulnerability.vulnId);
+        //https://api.sandbox.fortify.com/api/v3/releases/4302/vulnerabilities/217b64f9-9e73-4578-a9ea-bbe41005f858/all-data
+        if (externalLink != null) {
+            entity.setExternalLink(externalLink);
+        }
+    }
+
+    private String getBaseURL(String entitiesURL) {
+        return entitiesURL.replace(API_SUFFIX,"");
+    }
 
     public static boolean sameDay(Date date1, Date date2) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
