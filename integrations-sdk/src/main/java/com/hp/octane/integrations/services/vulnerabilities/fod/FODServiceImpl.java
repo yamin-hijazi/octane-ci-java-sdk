@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static com.hp.octane.integrations.services.vulnerabilities.IssuesFileSerializer.*;
 import static com.hp.octane.integrations.services.vulnerabilities.fod.FODValuesConverter.sameDay;
+import static com.hp.octane.integrations.utils.CIPluginSDKUtils.doWait;
 
 public class FODServiceImpl implements FODService {
 
@@ -203,11 +204,7 @@ public class FODServiceImpl implements FODService {
                 for(int i =0; i< requiredExtendedData.size(); i++){
                     Vulnerability t = requiredExtendedData.get(i);
                     if(i > 0){
-                        try {
-                            Thread.sleep(1200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        doWait(1200);
                     }
                     idToAllData.put(t.id,
                         FODVulnerabilityService.getSingleVulnAlldata(releaseId, t.vulnId));
